@@ -40,7 +40,7 @@ pub fn set_activity(
 ) -> bool {
     let mut activity_payload = activity::Activity::new()
         .state(state)
-        .details(&details);
+        .details(details);
 
     let mut images = activity::Assets::new();
 

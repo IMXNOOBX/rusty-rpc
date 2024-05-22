@@ -26,7 +26,7 @@ fn main() {
             let mut i = 0;
             loop {
                 discord_rpc::set_activity(
-                    "testing", "Some",
+                    "Rusty Rpc", "Testing",
                     Some(&("catgif".to_string() + &i.to_string())), None, None, None,
                     None, 
                     None, None, None, None
@@ -34,18 +34,18 @@ fn main() {
 
                 i += 1;
                 if i >= config::cfg::ANIMATED_AMOUNT {
-                    break;
+                    i = 0;
                 }
 
-                thread::sleep(time::Duration::from_secs(1));
+                thread::sleep(time::Duration::from_millis(500));
             }
 
         } else {
             discord_rpc::set_activity(
-                "testing", "Some",
+                "Rusty Rpc", "Testing",
                 Some("catto"), None, None, None,
                 None, 
-                None, None, None, None
+                Some("Teste"), Some("discord://-/apps"), None, None
             );
         }
     }
@@ -55,11 +55,12 @@ fn main() {
     }).expect("Error setting Ctrl-C handler");
 
     while running.load(Ordering::SeqCst) {}
+
+    log::warn("Exit request event received, exiting...".to_string());
+
     if discord_rpc::disconnect() {
         log::success("Successfully disconnected from Discord IPC".to_string());
     } else {
         log::error("Failed to disconnect from Discord IPC".to_string());
     }
-
-    log::warn("Exiting...".to_string());
 }
