@@ -1,0 +1,11 @@
+[package]
+name = "rusty-rpc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.38"
+ctrlc = "3.4.4"
+discord-rich-presence = "0.2.4"
+json = "0.12.4"
+lazy_static = "1.4.0"
