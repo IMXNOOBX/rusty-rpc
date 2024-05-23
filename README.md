@@ -1,26 +1,27 @@
 # 🦀 Rusty RPC
-> Trying some *rusty* programming language, to make a *rusty discord rpc*. The main goal with this project is to learn Rust and get to know 🦀 **Ferris** and all its secrets.
+> Trying some ***rusty*** programming language, to make a **rusty discord rpc**. The main goal with this project is to learn Rust and get to know 🦀 **Ferris** and all his secrets.
 
 ## 🧶 What is this a Discord RPC
-*Discord* RPC (*a.k.a* Discord Rich Presence) is a feature that allows you to display your current activity on *Discord*. It's a way to show what you are doing in a game or application. You can learn more here [*Discord RPC*](https://discord.com/developers/docs/topics/rpc).
+*Discord* RPC (*a.k.a* **Discord Rich Presence**) is a feature that allows you to display your current activity on *Discord*. It's a way to show what you are doing in a game or application. You can learn more here [*Discord RPC*](https://discord.com/developers/docs/topics/rpc).
 
 ![Banner](.github/banner.png)
 
-This project has been made easier with the help of the wrapper library [*discord-rpc*](https://crates.io/crates/discord-rich-presence) *([git](https://github.com/vionya/discord-rich-presence))* 
+This project has been made *easier* thanks to the *wrapper* library [**discord-rpc**](https://crates.io/crates/discord-rich-presence) *([git](https://github.com/vionya/discord-rich-presence))* 
 
 # 🪁 How to use
 To use this project, you do not need to install anything, just download the latest release from the [releases page](https://github.com/IMXNOOBX/rusty-rpc/releases) and run the executable.
 
 > [!TIP]
-> *You can also build it yourself, go to [for developers](#-for-developers)*
+> *You can also build it yourself, if go to [for developers](#-for-developers)*
 
 ## 🧩 Config
 To customize your discord rich presence, you can modify the `config.json` file. 
 
 > [!NOTE]  
 > *It will prompt you to generate it once you start it*
+> *To disable any field, leave it empty*
 
-```json
+```ts
 {
     "client_id": "1164950312914800850", // Developer portal application id
 
@@ -56,7 +57,7 @@ To customize your discord rich presence, you can modify the `config.json` file.
 
 ## 🚀 For Developers
 > [!IMPORTANT]  
-> *you need to have Rust installed on your machine. You can install it from [here](https://www.rust-lang.org/tools/install).*
+> *You first need to have **Rust** **installed** on your machine. You can install it from [here](https://www.rust-lang.org/tools/install).*
 
 To build the project from source, you can use the following commands:
 
@@ -75,9 +76,8 @@ cargo run
 cargo build 
 cargo build --release
 ```
-
-
-
+> [!IMPORTANT]  
+> You can star the repository by clicking ⭐ on the top right corner of this page.
 
 # 🔖 License & Copyright
 
