@@ -48,19 +48,27 @@ pub fn set_activity(
     // println!("{:?}", large_image.is_some());
     // println!("{:?}", large_image.unwrap());
 
-    if large_image.is_some() {
+    if 
+        large_image.is_some() && 
+        large_image.unwrap().len() > 0 {
         images = images.large_image(large_image.unwrap());
     }
 
-    if large_text.is_some() {
+    if 
+        large_text.is_some() && 
+        large_text.unwrap().len() > 0 {
         images = images.large_text(large_text.unwrap());
     }
 
-    if small_image.is_some() {
+    if 
+        small_image.is_some() && 
+        small_image.unwrap().len() > 0  {
         images = images.small_image(small_image.unwrap());
     }
 
-    if small_text.is_some() {
+    if 
+        small_text.is_some() && 
+        small_text.unwrap().len() > 0 {
         images = images.small_text(small_text.unwrap());
     }
     
@@ -76,7 +84,8 @@ pub fn set_activity(
     let mut buttons = Vec::new();
     
     if 
-        first_button_label.is_some() && 
+        first_button_label.is_some() &&
+        first_button_label.unwrap().len() > 0 && 
         first_button_url.is_some() {
 
         buttons.push(
@@ -89,6 +98,7 @@ pub fn set_activity(
 
     if 
         second_button_label.is_some() && 
+        second_button_label.unwrap().len() > 0 &&
         second_button_url.is_some() {
 
         buttons.push(

@@ -42,19 +42,26 @@ fn parse(content: String) -> bool {
             cfg::CLIENT_ID = client_id.to_string();
             log::success(format!("Parsed client_id as {}", client_id));
         } else {
-            log::error("Failed to parse client_id".to_string());
+            log::error("Failed to parse client_id, this is a required field!".to_string());
             return false;
         }
 
         if let Some(state) = json["state"].as_str() {
             cfg::STATE = state.to_string();
             log::success(format!("Parsed state as {}", state));
+        } else {
+            log::error("Failed to parse state, this is a required field!".to_string());
+            return false;
         }
 
         if let Some(details) = json["details"].as_str() {
             cfg::DETAILS = details.to_string();
             log::success(format!("Parsed details as {}", details));
+        } else {
+            log::error("Failed to parse details, this is a required field!".to_string());
+            return false;
         }
+
         if let Some(timestamp) = json["timestamp"].as_bool() {
             cfg::TIMESPAMP = timestamp;
             log::success(format!("Parsed timestamp as {}", timestamp));
@@ -186,8 +193,8 @@ pub fn write() -> bool {
         "large_image": "catto",
         "large_text": "Im a cat!",
     
-        "small_image": "catto",
-        "small_text": "Im a tiny cat!"
+        "small_image": "ferris",
+        "small_text": "Im a tiny crab!"
     },
 
     "buttons": {

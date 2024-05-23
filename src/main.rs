@@ -49,15 +49,13 @@ fn main() {
  * Prompt the user to create a new config file
  */
 fn handle_config() {
-    log::error("Failed to read config file".to_string());
-
     let mut input = String::new();
     log::warn("Would you like to create a new config file with the default values? (Y/n)".to_string());
     std::io::stdin().read_line(&mut input).unwrap();
 
     if input.trim().to_lowercase() == "y" {
         if !config::write() {
-            log::error("Failed to write config file, please check the docs at https://github.com/IMXNOOBX/rusty-rpc#config".to_string());
+            log::error("Failed to write config file, please check the docs at https://github.com/IMXNOOBX/rusty-rpc#-config".to_string());
             std::process::exit(1);
         }
 
@@ -66,7 +64,7 @@ fn handle_config() {
             std::process::exit(1);
         }
     } else {
-        log::error("Please create a config file with the values provided in the docs at https://github.com/IMXNOOBX/rusty-rpc#config".to_string());
+        log::error("Please create a config file with the values provided in the docs at https://github.com/IMXNOOBX/rusty-rpc#-config".to_string());
         std::process::exit(1);
     }
 }
