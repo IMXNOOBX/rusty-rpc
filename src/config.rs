@@ -1,4 +1,4 @@
-use std::{fs::File, io::Read};
+use std::{fs::File, io::{Read, Write}};
 // use json::JsonValue;
 // use lazy_static::lazy_static;
 // use std::sync::Mutex;
@@ -8,9 +8,23 @@ use crate::log;
 pub mod cfg {
     pub static mut CLIENT_ID: String = String::new();
 
-    pub static mut ANIMATED: bool = false;
-    pub static mut ANIMATED_AMOUNT: i64 = 0;
-    pub static mut ANIMATED_IMG: String = String::new();
+    pub static mut STATE: String = String::new();
+    pub static mut DETAILS: String = String::new();
+    pub static mut TIMESPAMP: bool = false;
+
+    pub static mut LARGE_ANIMATED: bool = false;
+    pub static mut LARGE_ANIMATED_SPEED: u64 = 0;
+    pub static mut LARGE_ANIMATED_AMOUNT: u64 = 0;
+    pub static mut LARGE_ANIMATED_IMG: String = String::new();
+    pub static mut LARGE_IMAGE: String = String::new();
+    pub static mut LARGE_TEXT: String = String::new();
+    pub static mut SMALL_IMAGE: String = String::new();
+    pub static mut SMALL_TEXT: String = String::new();
+
+    pub static mut FIRST_BUTTON_LABEL: String = String::new();
+    pub static mut FIRST_BUTTON_URL: String = String::new();
+    pub static mut SECOND_BUTTON_LABEL: String = String::new();
+    pub static mut SECOND_BUTTON_URL: String = String::new();
 }
 
 fn parse(content: String) -> bool {
@@ -23,67 +37,106 @@ fn parse(content: String) -> bool {
 
     let json = json.unwrap();
 
-    if json.has_key("client_id") {
-        let client_id_raw = json["client_id"].as_str();
-
-        if client_id_raw.is_some() {
-            let client_id = client_id_raw.unwrap().to_string();
-            unsafe { cfg::CLIENT_ID = client_id; }
-            log::success(format!("parsed client_id as {}", client_id_raw.unwrap().to_string()));            
+    unsafe {
+        if let Some(client_id) = json["client_id"].as_str() {
+            cfg::CLIENT_ID = client_id.to_string();
+            log::success(format!("Parsed client_id as {}", client_id));
         } else {
             log::error("Failed to parse client_id".to_string());
             return false;
         }
-    } else {
-        log::error("Failed to find client_id in config file".to_string());
-    }
 
-    if json.has_key("animated") {
-        let animated_raw: Option<bool> = json["animated"].as_bool();
-
-        if animated_raw.is_some() {
-            let animated_img = animated_raw.unwrap();
-            unsafe { cfg::ANIMATED = animated_img }
-            log::success(format!("parsed animated as {:?}", animated_img));            
-        } else {
-            log::error("Failed to parse animated".to_string());
-            return false;
+        if let Some(state) = json["state"].as_str() {
+            cfg::STATE = state.to_string();
+            log::success(format!("Parsed state as {}", state));
         }
-    } else {
-        log::error("Failed to find animated in config file".to_string());
-    }
 
-    if json.has_key("animated_img") {
-        let animated_img_raw = json["animated_img"].as_str();
-
-        if animated_img_raw.is_some() {
-            let animated_img = animated_img_raw.unwrap().to_string();
-            unsafe { cfg::ANIMATED_IMG = animated_img }
-            log::success(format!("parsed animated as {:?}", animated_img_raw.unwrap().to_string()));            
-        } else {
-            log::error("Failed to parse animated_img".to_string());
-            return false;
+        if let Some(details) = json["details"].as_str() {
+            cfg::DETAILS = details.to_string();
+            log::success(format!("Parsed details as {}", details));
         }
-    } else {
-        log::error("Failed to find animated_img in config file".to_string());
-    }
-
-    if json.has_key("animated_amount") {
-        let animated_amount_raw = json["animated_amount"].as_i64();
-
-        if animated_amount_raw.is_some() {
-            let animated_amount = animated_amount_raw.unwrap();
-            unsafe { cfg::ANIMATED_AMOUNT = animated_amount }
-            log::success(format!("parsed animated as {:?}", animated_amount));            
-        } else {
-            log::error("Failed to parse animated_amount".to_string());
-            return false;
+        if let Some(timestamp) = json["timestamp"].as_bool() {
+            cfg::TIMESPAMP = timestamp;
+            log::success(format!("Parsed timestamp as {}", timestamp));
         }
-    } else {
-        log::error("Failed to find animated_amount in config file".to_string());
+
+        if json["images"].is_object() {
+            let images = &json["images"];
+
+            if let Some(large_animated) = images["large_animated"].as_bool() {
+                cfg::LARGE_ANIMATED = large_animated;
+                log::success(format!("Parsed large_animated as {}", large_animated));
+            }
+
+            if let Some(large_animate_speed) = images["large_animate_speed"].as_u64() {
+                cfg::LARGE_ANIMATED_SPEED = large_animate_speed;
+                log::success(format!("Parsed large_animate_speed as {}", large_animate_speed));
+            }
+            if let Some(large_animated_amount) = images["large_animated_amount"].as_u64() {
+                cfg::LARGE_ANIMATED_AMOUNT = large_animated_amount;
+                log::success(format!("Parsed large_animated_amount as {}", large_animated_amount));
+            }
+
+            if let Some(large_animated_img) = images["large_animated_img"].as_str() {
+                cfg::LARGE_ANIMATED_IMG = large_animated_img.to_string();
+                log::success(format!("Parsed large_animated_img as {}", large_animated_img));
+            }
+
+            if let Some(large_image) = images["large_image"].as_str() {
+                cfg::LARGE_IMAGE = large_image.to_string();
+                log::success(format!("Parsed large_image as {}", large_image));
+            }
+
+            if let Some(large_text) = images["large_text"].as_str() {
+                cfg::LARGE_TEXT = large_text.to_string();
+                log::success(format!("Parsed large_text as {}", large_text));
+            }
+
+            if let Some(small_image) = images["small_image"].as_str() {
+                cfg::SMALL_IMAGE = small_image.to_string();
+                log::success(format!("Parsed small_image as {}", small_image));
+            }
+
+            if let Some(small_text) = images["small_text"].as_str() {
+                cfg::SMALL_TEXT = small_text.to_string();
+                log::success(format!("Parsed small_text as {}", small_text));
+            }
+        }
+
+        if json["buttons"].is_object() {
+            let buttons = &json["buttons"];
+
+            if buttons["first"].is_object() {
+                let first_button = &buttons["first"];
+
+                if let Some(label) = first_button["label"].as_str() {
+                    cfg::FIRST_BUTTON_LABEL = label.to_string();
+                    log::success(format!("Parsed first_button label as {}", label));
+                }
+
+                if let Some(url) = first_button["url"].as_str() {
+                    cfg::FIRST_BUTTON_URL = url.to_string();
+                    log::success(format!("Parsed first_button url as {}", url));
+                }
+            }
+
+            if buttons["second"].is_object() {
+                let second_button = &buttons["second"];
+
+                if let Some(label) = second_button["label"].as_str() {
+                    cfg::SECOND_BUTTON_LABEL = label.to_string();
+                    log::success(format!("Parsed second_button label as {}", label));
+                }
+
+                if let Some(url) = second_button["url"].as_str() {
+                    cfg::SECOND_BUTTON_URL = url.to_string();
+                    log::success(format!("Parsed second_button url as {}", url));
+                }
+            }
+        }
     }
 
-    return true;
+    true
 }
 
 pub fn read() -> bool {
@@ -103,6 +156,55 @@ pub fn read() -> bool {
     }
 
     log::success("Successfully parsed config file".to_string());
+
+    return true;
+}
+
+pub fn write() -> bool {
+    let file = File::create("config.json");
+
+    if file.is_err() {
+        log::error(format!("Failed to create config file: {}", file.err().unwrap()));
+        return false;
+    }
+
+    let mut file = file.unwrap();
+
+    let content = r#"{
+    "client_id": "1164950312914800850",
+
+    "state": "Try out Rusty RPC, a Rust client for Discord Rich Presence!",
+    "details": "Rusty RPC",
+    "timestamp": true,
+
+    "images": {
+        "large_animated": false,
+        "large_animate_speed": 3000,
+        "large_animated_amount": 12,
+        "large_animated_img": "catgif",
+
+        "large_image": "catto",
+        "large_text": "Im a cat!",
+    
+        "small_image": "catto",
+        "small_text": "Im a tiny cat!"
+    },
+
+    "buttons": {
+        "first": {
+            "label": "Developer",
+            "url": "https://noob.bio"
+        },
+        "second": {
+            "label": "Repository",
+            "url": "https://github.com/IMXNOOBX/rusty-rpc"
+        }
+    }
+}"#;
+
+    file.write_all(content.as_bytes()).unwrap();
+
+    log::success("Successfully wrote config file".to_string());
 
     return true;
 }

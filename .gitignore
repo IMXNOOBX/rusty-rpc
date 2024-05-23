@@ -21,3 +21,4 @@ Cargo.lock
 # Added by noob
 
 /imgtest
+config.json
